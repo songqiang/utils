@@ -33,28 +33,50 @@ then
 	exit
 fi
 
-jobdate=$(cat $oldout|sed -n '2p'|sed \
--e 's/Jan/01/' \
--e 's/Feb/02/' \
--e 's/Mar/03/' \
--e 's/Apr/04/' \
--e 's/May/05/' \
--e 's/Jun/06/' \
--e 's/Jul/07/' \
--e 's/Aug/08/' \
--e 's/Sep/09/' \
--e 's/Oct/10/' \
--e 's/Nov/11/' \
--e 's/Dec/12/' | awk '{if ($6 < 10) $6="0"$6;  print $9$5$6}')
+newbase=$(awk < $oldfile '
+BEGIN \
+{
+monnum["Jan"] = "01";
+monnum["Feb"] = "02";
+monnum["Mar"] = "03";
+monnum["Apr"] = "04";
+monnum["May"] = "05";
+monnum["Jun"] = "06";
+monnum["Jul"] = "07";
+monnum["Aug"] = "08";
+monnum["Sep"] = "09";
+monnum["Oct"] = "10";
+monnum["Nov"] = "11";
+monnum["Dec"] = "12";
+}
 
-jobtime=$(cat $oldout|sed -n '2p'| awk '{print $7}')
-              
-jobid=$(cat $oldout|sed -n '3 s/[^0-9]*\([0-9]*\).*/\1/p')
-            
-jobname=$(cat $oldout|sed -n '6 s/Name: *\(.*\)\.qsub/\1/p')
+NR == 2 \
+{
+if ($6 < 10) $6 = "0"$6;
+jobdate = $9 monnum[$5] $6;
+jobtime = $7;
+}
 
-newout=$jobname-$jobdate-$jobid.OU
-newerr=$jobname-$jobdate-$jobid.ER
+NR == 3 \
+{
+sub(/\..*/, "", $2);
+jobid = $2;
+}
+
+NR == 6 \
+{
+sub(/\.qsub/, "", $2);
+jobname = $2;
+}
+
+END \
+{
+print jobname "-" jobdate "-" jobid;
+}
+')
+
+newout=$newbase.OU
+newerr=$newbase.ER
 
 if [ "$oldout" !=  "$newout" ]
 then
