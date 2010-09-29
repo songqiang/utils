@@ -1,5 +1,12 @@
 #! /bin/bash
 
+# Copyright (C) 2010 SONG QIANG
+# This program is free software distributed under the terms of 
+# the GNU General Public License as published by the Free Software
+# Foundation
+
+# This script change the name of PBS output files according to its execution status 
+
 if [ $# -eq 0 ]
 then    
     exit    
