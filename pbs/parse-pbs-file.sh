@@ -33,7 +33,7 @@ then
 	exit
 fi
 
-newbase=$(awk < $oldfile '
+newbase=$(awk < $oldout '
 BEGIN \
 {
 monnum["Jan"] = "01";
@@ -59,8 +59,8 @@ jobtime = $7;
 
 NR == 3 \
 {
-sub(/\..*/, "", $2);
-jobid = $2;
+sub(/\..*/, "", $3);
+jobid = $3;
 }
 
 NR == 6 \
