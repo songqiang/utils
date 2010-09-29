@@ -15,6 +15,7 @@ fi
 if [ $# -ge 2 ]
 then
 	echo $*|xargs -n 1 $0
+	exit
 fi 
 
 oldout=$1
