@@ -1,27 +1,30 @@
 # logrun: a function to run a bash coomand and log the running info
 # Song Qiang <keeyang@ustc.edu> 2013
 
-function logrun # command logfile
+function logrun # logfile command [options] [arguments]
 {
-    if [ "$#" == 2 ];
+    if [ "$#" -ge 2 ];
     then
-        echo ">>> " "$1"|tee -a "$2";      
-        ($1) 2>&1|tee -a "$2";      
+        echo ">>> " "${@:2}"|tee -a "$1";      
+        (${@:2}) 2>&1|tee -a "$1";      
     else
-        echo "logrun: command logfile" 1>&2;
+        echo "logrun: logfile command [options]" 1>&2;
     fi
 }
 
-# this function expects two arguments: the first being the command to run and 
-# the second being the logfile. 
-# if the command contains spaces, it should be quoted.
+# this function expects at least two arguments: 
+# the first is the log file
+# and the remaining arguments are the command and its options and arguments
 
-# use case:
+# example:
 # qiangson@hpc-cmb:~/tmp
-# $ logrun "echo test" test.log
+# $ logrun test.log echo test
 # >>>  echo test
 # test
 # qiangson@hpc-cmb:~/tmp
-# $ echo test.log
-# test.log
+# $ cat test.log 
+# >>>  echo test
+# test
+
+
 
