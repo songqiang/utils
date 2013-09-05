@@ -8,7 +8,7 @@ function logrun # logfile command [options] [arguments]
         echo ">>> " "${@:2}"|tee -a "$1";      
         (${@:2}) 2>&1|tee -a "$1";      
     else
-        echo "logrun: logfile command [options]" 1>&2;
+        echo "logrun: logfile command [options]" 1>&2 && false;
     fi
 }
 
