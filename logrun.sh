@@ -26,5 +26,18 @@ function logrun # logfile command [options] [arguments]
 # >>>  echo test
 # test
 
+## alternative implementation with set -x options
 
+## function logrun
+## {
+##    if [ "$#" -ge 2 ];
+##    then
+##        PS4=">>> ";      
+##        set -x;      
+##        (${@:2}) 2>&1|tee -a "$1";      
+##        set +x
+##    else
+##        echo "logrun: logfile command [options]" 1>&2 && false;
+##    fi
+## }
 
