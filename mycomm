@@ -1,0 +1,18 @@
+#! /usr/bin/env bash
+
+# wrapper for the comm utility
+# Song Qiang <keeyang@ustc.edu> 2017
+
+# supports automatica sorting of input files and nicer output
+
+tmpfile1=$(mktemp)
+tmpfile2=$(mktemp)
+
+sort $1 > $tmpfile1
+sort $2 > $tmpfile2
+
+comm -12  $tmpfile1 $tmpfile2|sed 's/^/BOTH /'
+comm -23  $tmpfile1 $tmpfile2|sed 's/^/LEFT /'
+comm -13  $tmpfile1 $tmpfile2|sed 's/^/RGHT /'
+
+rm -f $tmpfile1 $tmpfile2
